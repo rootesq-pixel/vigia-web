@@ -302,25 +302,46 @@
     w.addEventListener('pointerleave', () => { w.style.setProperty('--rx', '0deg'); w.style.setProperty('--ry', '0deg'); w.classList.remove('hot'); });
   });
 
-  /* ---------- galería de capturas con barrido ---------- */
-  const tabs = $$('.g-tabs button'), gimgs = $$('.g-stage img'), ind = $('.g-ind'), wipe = $('.g-wipe');
-  let gi = 0, gTimer = 0, gHover = false, gVis = false;
-  const moveInd = () => { const b = tabs[gi]; if (!b || !ind) return; ind.style.width = b.offsetWidth + 'px'; ind.style.transform = `translateX(${b.offsetLeft}px)`; };
-  function showG(i, user) {
-    if (i === gi) return;
-    const prev = gimgs[gi]; gi = i;
-    tabs.forEach((b, k) => b.setAttribute('aria-selected', k === i));
-    gimgs.forEach((im, k) => { im.classList.toggle('on', k === i); im.classList.toggle('prev', im === prev); });
-    if (wipe && !RM) { wipe.classList.remove('go'); void wipe.offsetWidth; wipe.classList.add('go'); }
-    moveInd(); if (user) restartG();
-  }
-  function restartG() { clearInterval(gTimer); if (!RM) gTimer = setInterval(() => { if (gVis && !gHover && !document.hidden) showG((gi + 1) % gimgs.length); }, 4800); }
-  tabs.forEach((b, k) => b.addEventListener('click', () => showG(k, true)));
-  const gal = $('.gallery');
-  if (gal) {
-    gal.addEventListener('pointerenter', () => gHover = true); gal.addEventListener('pointerleave', () => gHover = false);
-    new IntersectionObserver(([e]) => { gVis = e.isIntersecting; }).observe(gal);
-    addEventListener('resize', moveInd); document.fonts && document.fonts.ready.then(moveInd); moveInd(); restartG();
+  /* ---------- ventana interactiva de la app: barra lateral + pestañas móviles ---------- */
+  const ax = $('.ax');
+  if (ax) {
+    const shell = $('.ax-shell', ax), crumb = $('.ax-crumb', ax), cap = $('#ax-cap'), wipeX = $('.g-wipe', ax);
+    const lists = $$('.ax-nav, .ax-tabs');
+    const allTabs = $$('[role="tab"][data-v]', document).filter(t => t.closest('.ax-nav, .ax-tabs'));
+    const views = $$('.axv', ax);
+    const CAP_REAL = 'Captura real de la versión en desarrollo, en modo demostración.';
+    const CAP_HTML = 'Vista recreada en HTML con el estilo de la app y datos de ejemplo: todavía no hay captura real de este apartado.';
+    let cur = 'panel';
+    const fit = () => { const w = shell.offsetWidth; if (w) ax.style.setProperty('--k', ax.clientWidth / w); };
+    new ResizeObserver(fit).observe(ax); fit();
+    function select(v, focus) {
+      if (v === cur) { if (focus) focusTab(focus, v); return; }
+      const next = views.find(x => x.id === 'axp-' + v), prev = views.find(x => x.id === 'axp-' + cur); if (!next) return;
+      cur = v;
+      allTabs.forEach(t => { const on = t.dataset.v === v; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
+      crumb.textContent = $('span', allTabs.find(t => t.dataset.v === v)).textContent;
+      cap.textContent = next.dataset.kind === 'real' ? CAP_REAL : CAP_HTML;
+      views.forEach(x => x.classList.remove('out'));
+      next.hidden = false;
+      if (prev) { prev.classList.remove('on'); prev.classList.add('out'); setTimeout(() => { if (cur !== prev.id.slice(4)) { prev.hidden = true; prev.classList.remove('out'); } }, RM ? 0 : 450); }
+      requestAnimationFrame(() => requestAnimationFrame(() => next.classList.add('on')));
+      if (wipeX && !RM) { wipeX.classList.remove('go'); void wipeX.offsetWidth; wipeX.classList.add('go'); }
+      const mt = $('.ax-tabs [data-v="' + v + '"]');
+      if (mt && mt.offsetParent) { const box = mt.parentElement; box.scrollTo({ left: mt.offsetLeft - (box.clientWidth - mt.offsetWidth) / 2, behavior: RM ? 'auto' : 'smooth' }); }
+      window.VigiaSound && VigiaSound.play('click');
+      if (focus) focusTab(focus, v);
+    }
+    function focusTab(list, v) { const t = $('[data-v="' + v + '"]', list); t && t.focus({ preventScroll: true }); }
+    allTabs.forEach(t => t.addEventListener('click', () => select(t.dataset.v)));
+    lists.forEach(list => list.addEventListener('keydown', e => {
+      const ts = $$('[role="tab"]', list), i = ts.findIndex(t => t.dataset.v === cur);
+      let n = null;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') n = (i + 1) % ts.length;
+      else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') n = (i - 1 + ts.length) % ts.length;
+      else if (e.key === 'Home') n = 0; else if (e.key === 'End') n = ts.length - 1;
+      if (n === null) return;
+      e.preventDefault(); select(ts[n].dataset.v, list);
+    }));
   }
 
   /* ---------- GSAP ---------- */
@@ -390,7 +411,6 @@
   /* ---------- capturas: entrada 3D con el scroll y parallax ---------- */
   if (!RM) {
     gsap.fromTo('.win-xl', { '--tx': '28deg', '--ts': .86, '--ty': '60px' }, { '--tx': '0deg', '--ts': 1, '--ty': '0px', ease: 'none', scrollTrigger: { trigger: '.show-stage', start: 'top 95%', end: 'top 25%', scrub: .6 } });
-    gsap.from('.callout', { opacity: 0, y: 20, stagger: .15, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.show-stage', start: 'top 45%', once: true } });
     gsap.to('.show-glow', { scale: 1.25, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.show-stage', start: 'top bottom', end: 'bottom top', scrub: true } });
     $$('.win-md').forEach(w => gsap.fromTo(w, { '--tx': '14deg', '--ty': '40px' }, { '--tx': '0deg', '--ty': '0px', ease: 'none', scrollTrigger: { trigger: w, start: 'top 95%', end: 'top 40%', scrub: .6 } }));
     if (innerWidth > 900) gsap.fromTo('.net-float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.net-combo', start: 'top bottom', end: 'bottom top', scrub: true } });

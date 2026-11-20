@@ -97,9 +97,6 @@
       <img src="img/app/01-dashboard-1423.webp" srcset="img/app/01-dashboard-760.webp 760w, img/app/01-dashboard-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Captura de Vigía: panel con el índice de seguridad, controles correctos, advertencias y fallos, y la lista de lo que requiere atención" fetchpriority="high" decoding="async">
       <span class="win-sheen" aria-hidden="true"></span>
     </figure>
-    <span class="callout c1 mono" aria-hidden="true"><b></b>Índice 0-100 ponderado</span>
-    <span class="callout c2 mono" aria-hidden="true"><b></b>Sin telemetría</span>
-    <span class="callout c3 mono" aria-hidden="true"><b></b>Lo que ya está en orden</span>
   </div>
   <p class="cap mono">Captura real de la versión en desarrollo, en modo demostración.</p>
 </section>
@@ -187,22 +184,134 @@
       <article class="card" data-up><span class="ic"><i data-lucide="key-round"></i></span><span class="num mono">07</span><h3>Contraseñas seguras</h3><p>Generador con entropía estimada y comprobación de filtraciones en Have I Been Pwned con k-anonimato.</p></article>
       <article class="card" data-up><span class="ic"><i data-lucide="file-text"></i></span><span class="num mono">08</span><h3>Informes HTML y PDF</h3><p>Exporta el estado de tu equipo para guardarlo, compararlo o enseñárselo a quien te ayude.</p></article>
     </div>
-    <div class="gallery" data-up>
-      <div class="g-tabs mono" role="tablist" aria-label="Capturas de Vigía">
-        <button role="tab" aria-selected="true" data-i="0"><i data-lucide="gauge"></i>Panel</button>
-        <button role="tab" aria-selected="false" data-i="1"><i data-lucide="list-checks"></i>Auditoría</button>
-        <button role="tab" aria-selected="false" data-i="2"><i data-lucide="network"></i>Red</button>
-        <button role="tab" aria-selected="false" data-i="3"><i data-lucide="key-round"></i>Contraseñas</button>
-        <span class="g-ind" aria-hidden="true"></span>
+    <div class="gallery ax-wrap" data-up>
+      <p class="ax-hint mono">Pulsa cada apartado de la barra lateral para recorrer la app.</p>
+      <div class="ax-tabs mono" data-lenis-prevent role="tablist" aria-label="Apartados de Vigía">
+<button type="button" role="tab" aria-controls="axp-panel" aria-selected="true" tabindex="0" data-v="panel"><i data-lucide="layout-dashboard"></i><span>Panel</span></button>
+<button type="button" role="tab" aria-controls="axp-auditoria" aria-selected="false" tabindex="-1" data-v="auditoria"><i data-lucide="shield"></i><span>Auditoría</span></button>
+<button type="button" role="tab" aria-controls="axp-red" aria-selected="false" tabindex="-1" data-v="red"><i data-lucide="network"></i><span>Red</span></button>
+<button type="button" role="tab" aria-controls="axp-persistencia" aria-selected="false" tabindex="-1" data-v="persistencia"><i data-lucide="rocket"></i><span>Persistencia</span></button>
+<button type="button" role="tab" aria-controls="axp-procesos" aria-selected="false" tabindex="-1" data-v="procesos"><i data-lucide="cpu"></i><span>Procesos</span></button>
+<button type="button" role="tab" aria-controls="axp-analisis" aria-selected="false" tabindex="-1" data-v="analisis"><i data-lucide="file-search"></i><span>Análisis</span></button>
+<button type="button" role="tab" aria-controls="axp-contrasenas" aria-selected="false" tabindex="-1" data-v="contrasenas"><i data-lucide="key-round"></i><span>Contraseñas</span></button>
+<button type="button" role="tab" aria-controls="axp-informes" aria-selected="false" tabindex="-1" data-v="informes"><i data-lucide="file-text"></i><span>Informes</span></button>
+<button type="button" role="tab" aria-controls="axp-ajustes" aria-selected="false" tabindex="-1" data-v="ajustes"><i data-lucide="settings"></i><span>Ajustes</span></button>
       </div>
-      <figure class="win win-lg g-stage" data-tilt>
-        <img class="on" src="img/app/01-dashboard-1423.webp" srcset="img/app/01-dashboard-760.webp 760w, img/app/01-dashboard-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Panel de Vigía con el índice de seguridad" loading="lazy" decoding="async">
-        <img src="img/app/02-auditoria-1423.webp" srcset="img/app/02-auditoria-760.webp 760w, img/app/02-auditoria-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Auditoría de Vigía: diez controles del puesto con estado, peso, evidencia y botón Corregir" loading="lazy" decoding="async">
-        <img src="img/app/03-red-1423.webp" srcset="img/app/03-red-760.webp 760w, img/app/03-red-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Vista de red de Vigía: conexiones TCP con proceso, PID, dirección local, remota y estado" loading="lazy" decoding="async">
-        <img src="img/app/04-contrasenas-1423.webp" srcset="img/app/04-contrasenas-760.webp 760w, img/app/04-contrasenas-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Generador de contraseñas de Vigía y comprobación de filtraciones con k-anonimato" loading="lazy" decoding="async">
+      <figure class="win win-lg ax" aria-label="Ventana interactiva de Vigía">
+        <div class="ax-shell">
+          <div class="ax-side">
+            <div class="ax-logo"><img src="img/logo.svg" alt="" width="34" height="34"><span><b>VIGÍA</b><small>Centinela local</small></span></div>
+            <div class="ax-nav" role="tablist" aria-orientation="vertical" aria-label="Apartados de Vigía">
+<button type="button" role="tab" id="axt-panel" aria-controls="axp-panel" aria-selected="true" tabindex="0" data-v="panel"><i data-lucide="layout-dashboard"></i><span>Panel</span></button>
+<button type="button" role="tab" id="axt-auditoria" aria-controls="axp-auditoria" aria-selected="false" tabindex="-1" data-v="auditoria"><i data-lucide="shield"></i><span>Auditoría</span></button>
+<button type="button" role="tab" id="axt-red" aria-controls="axp-red" aria-selected="false" tabindex="-1" data-v="red"><i data-lucide="network"></i><span>Red</span></button>
+<button type="button" role="tab" id="axt-persistencia" aria-controls="axp-persistencia" aria-selected="false" tabindex="-1" data-v="persistencia"><i data-lucide="rocket"></i><span>Persistencia</span></button>
+<button type="button" role="tab" id="axt-procesos" aria-controls="axp-procesos" aria-selected="false" tabindex="-1" data-v="procesos"><i data-lucide="cpu"></i><span>Procesos</span></button>
+<button type="button" role="tab" id="axt-analisis" aria-controls="axp-analisis" aria-selected="false" tabindex="-1" data-v="analisis"><i data-lucide="file-search"></i><span>Análisis</span></button>
+<button type="button" role="tab" id="axt-contrasenas" aria-controls="axp-contrasenas" aria-selected="false" tabindex="-1" data-v="contrasenas"><i data-lucide="key-round"></i><span>Contraseñas</span></button>
+<button type="button" role="tab" id="axt-informes" aria-controls="axp-informes" aria-selected="false" tabindex="-1" data-v="informes"><i data-lucide="file-text"></i><span>Informes</span></button>
+<button type="button" role="tab" id="axt-ajustes" aria-controls="axp-ajustes" aria-selected="false" tabindex="-1" data-v="ajustes"><i data-lucide="settings"></i><span>Ajustes</span></button>
+            </div>
+            <div class="ax-foot"><b></b>Sin telemetría</div>
+          </div>
+          <div class="ax-main">
+            <div class="ax-title"><span>Vigía · <b class="ax-crumb">Panel</b></span><span class="ax-ctl" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span></div>
+            <div class="ax-views">
+<section class="axv on" role="tabpanel" id="axp-panel" aria-labelledby="axt-panel" data-kind="real"><img src="img/app/01-dashboard-view-1178.webp" srcset="img/app/01-dashboard-view-640.webp 640w, img/app/01-dashboard-view-1178.webp 1178w" sizes="(max-width: 900px) 92vw, 960px" width="1178" height="853" alt="Panel de Vigía: índice de seguridad 49 de 100, correctos, advertencias, fallos y lo que requiere atención" decoding="async"></section>
+<section class="axv" role="tabpanel" id="axp-auditoria" aria-labelledby="axt-auditoria" data-kind="real" hidden><img src="img/app/02-auditoria-view-1178.webp" srcset="img/app/02-auditoria-view-640.webp 640w, img/app/02-auditoria-view-1178.webp 1178w" sizes="(max-width: 900px) 92vw, 960px" width="1178" height="853" alt="Auditoría de Vigía: diez controles del puesto con estado, peso, evidencia y botón Corregir" loading="lazy" decoding="async"></section>
+<section class="axv" role="tabpanel" id="axp-red" aria-labelledby="axt-red" data-kind="real" hidden><img src="img/app/03-red-view-1178.webp" srcset="img/app/03-red-view-640.webp 640w, img/app/03-red-view-1178.webp 1178w" sizes="(max-width: 900px) 92vw, 960px" width="1178" height="853" alt="Red en Vigía: conexiones TCP con proceso, PID, dirección local, remota y estado" loading="lazy" decoding="async"></section>
+<section class="axv" role="tabpanel" id="axp-contrasenas" aria-labelledby="axt-contrasenas" data-kind="real" hidden><img src="img/app/04-contrasenas-view-1178.webp" srcset="img/app/04-contrasenas-view-640.webp 640w, img/app/04-contrasenas-view-1178.webp 1178w" sizes="(max-width: 900px) 92vw, 960px" width="1178" height="853" alt="Generador de contraseñas de Vigía y comprobación de filtraciones con k-anonimato" loading="lazy" decoding="async"></section>
+<section class="axv" role="tabpanel" id="axp-persistencia" aria-labelledby="axt-persistencia" data-kind="html" hidden>
+  <div class="v-head"><div><p class="v-eye">Persistencia</p><h4>Arranque y persistencia</h4><p class="v-desc">Lo que se ejecuta solo al iniciar Windows: claves Run, tareas programadas y servicios, cada uno con su firma digital.</p></div><span class="v-btn">Volver a leer</span></div>
+  <div class="v-chips"><span class="on">Todo · 7</span><span>Claves Run · 3</span><span>Tareas · 2</span><span>Servicios · 2</span></div>
+  <div class="v-card v-table">
+    <div class="tr th"><span>Entrada</span><span>Tipo</span><span>Ubicación</span><span>Firma</span></div>
+    <div class="tr"><span><b>SecurityHealth</b><small>SecurityHealthSystray.exe</small></span><span>Clave Run</span><span class="m">HKLM\…\CurrentVersion\Run</span><span><i class="bd ok">Firmado</i> Microsoft Windows</span></div>
+    <div class="tr"><span><b>OneDrive</b><small>OneDrive.exe /background</small></span><span>Clave Run</span><span class="m">HKCU\…\CurrentVersion\Run</span><span><i class="bd ok">Firmado</i> Microsoft Corporation</span></div>
+    <div class="tr hl"><span><b>updater_helper</b><small>%AppData%\Local\Temp\uh.exe</small></span><span>Clave Run</span><span class="m">HKCU\…\CurrentVersion\Run</span><span><i class="bd ko">Sin firma</i> Revisar</span></div>
+    <div class="tr"><span><b>MicrosoftEdgeUpdateTaskMachineCore</b><small>MicrosoftEdgeUpdate.exe /c</small></span><span>Tarea</span><span class="m">\Microsoft\EdgeUpdate</span><span><i class="bd ok">Firmado</i> Microsoft Corporation</span></div>
+    <div class="tr"><span><b>SyncAgentDaily</b><small>sync-agent.exe --daily</small></span><span>Tarea</span><span class="m">\</span><span><i class="bd wa">Firma caducada</i> Revisar</span></div>
+    <div class="tr"><span><b>WSearch</b><small>SearchIndexer.exe</small></span><span>Servicio</span><span class="m">Automático</span><span><i class="bd ok">Firmado</i> Microsoft Windows</span></div>
+    <div class="tr"><span><b>Spooler</b><small>spoolsv.exe</small></span><span>Servicio</span><span class="m">Automático</span><span><i class="bd ok">Firmado</i> Microsoft Windows</span></div>
+  </div>
+</section>
+<section class="axv" role="tabpanel" id="axp-procesos" aria-labelledby="axt-procesos" data-kind="html" hidden>
+  <div class="v-head"><div><p class="v-eye">Procesos</p><h4>Procesos en ejecución</h4><p class="v-desc">Cada proceso con su PID, la ruta del ejecutable, su firma y el hash SHA-256 calculado en local.</p></div><span class="v-btn">Actualizar</span></div>
+  <div class="v-filter"><span class="v-input">Filtrar por nombre, PID o ruta</span><span class="v-sel">Todas las firmas ⌄</span></div>
+  <div class="v-card v-table v-proc">
+    <div class="tr th"><span>Proceso</span><span>PID</span><span>Ruta</span><span>Firma</span><span>SHA-256</span></div>
+    <div class="tr"><span><b>explorer.exe</b></span><span class="m">4412</span><span class="m">C:\Windows\explorer.exe</span><span><i class="bd ok">Firmado</i></span><span class="m h">9c1e…a07b</span></div>
+    <div class="tr"><span><b>MsMpEng.exe</b></span><span class="m">3120</span><span class="m">C:\ProgramData\Microsoft\Windows Defender\…</span><span><i class="bd ok">Firmado</i></span><span class="m h">51d3…e9f2</span></div>
+    <div class="tr"><span><b>svchost.exe</b></span><span class="m">1188</span><span class="m">C:\Windows\System32\svchost.exe</span><span><i class="bd ok">Firmado</i></span><span class="m h">7a40…13cd</span></div>
+    <div class="tr"><span><b>chrome.exe</b></span><span class="m">8836</span><span class="m">C:\Program Files\Google\Chrome\…</span><span><i class="bd ok">Firmado</i></span><span class="m h">e2b8…6f51</span></div>
+    <div class="tr hl"><span><b>desconocido.exe</b></span><span class="m">9420</span><span class="m">C:\Users\…\AppData\Local\Temp\desconocido.exe</span><span><i class="bd ko">Sin firma</i></span><span class="m h">0f6c…b2d4</span></div>
+    <div class="tr"><span><b>Code.exe</b></span><span class="m">7704</span><span class="m">C:\Users\…\AppData\Local\Programs\…</span><span><i class="bd ok">Firmado</i></span><span class="m h">b97d…40aa</span></div>
+    <div class="tr"><span><b>OneDrive.exe</b></span><span class="m">5256</span><span class="m">C:\Users\…\AppData\Local\Microsoft\OneDrive\…</span><span><i class="bd ok">Firmado</i></span><span class="m h">3e55…c8e0</span></div>
+  </div>
+</section>
+<section class="axv" role="tabpanel" id="axp-analisis" aria-labelledby="axt-analisis" data-kind="html" hidden>
+  <div class="v-head"><div><p class="v-eye">Análisis</p><h4>Análisis de archivos</h4><p class="v-desc">Calcula el hash en local y aplica reglas tipo YARA. Si añades tu clave de VirusTotal, solo viaja el hash, nunca el archivo.</p></div></div>
+  <div class="v-cols">
+    <div class="v-col">
+      <div class="v-drop"><span class="v-drop-ic">⇪</span><b>Arrastra un archivo aquí</b><small>o pulsa para elegirlo en el equipo</small></div>
+      <div class="v-card v-res">
+        <p class="v-lbl">Último análisis</p>
+        <p><b>instalador_ejemplo.exe</b> <i class="bd ok">Sin coincidencias</i></p>
+        <p class="v-kv"><span>SHA-256</span><span class="m">4b8f2c91d0e7a35f6c19be04d7a2e5c8f1093ab76d2e4c58b0f17a9e3d6c2b10</span></p>
+        <p class="v-kv"><span>Tamaño</span><span class="m">12,4 MB</span></p>
+        <p class="v-kv"><span>Reglas YARA</span><span>Ninguna regla coincide</span></p>
+      </div>
+    </div>
+    <div class="v-card v-vt">
+      <p class="v-lbl">VirusTotal</p>
+      <h5>Consulta opcional por hash</h5>
+      <p class="v-desc">Desactivado. Añade tu propia clave en Ajustes para consultar el SHA-256. El archivo no sale del equipo.</p>
+      <div class="v-row"><span>Usar VirusTotal</span><span class="v-tg off"></span></div>
+      <span class="v-btn ghost">Ir a Ajustes</span>
+    </div>
+  </div>
+</section>
+<section class="axv" role="tabpanel" id="axp-informes" aria-labelledby="axt-informes" data-kind="html" hidden>
+  <div class="v-head"><div><p class="v-eye">Informes</p><h4>Exportar informe</h4><p class="v-desc">Un resumen del estado del equipo para guardarlo, compararlo más adelante o enseñárselo a quien te ayude.</p></div></div>
+  <div class="v-cols">
+    <div class="v-col">
+      <div class="v-card v-exp"><span class="v-exp-ic">HTML</span><div><b>Informe HTML</b><small>Se abre en cualquier navegador</small></div><span class="v-btn">Exportar</span></div>
+      <div class="v-card v-exp"><span class="v-exp-ic">PDF</span><div><b>Informe PDF</b><small>Listo para imprimir o archivar</small></div><span class="v-btn ghost">Exportar</span></div>
+      <div class="v-card"><p class="v-lbl">Incluir</p>
+        <div class="v-row"><span>Auditoría y evidencias</span><span class="v-tg"></span></div>
+        <div class="v-row"><span>Conexiones y puertos</span><span class="v-tg"></span></div>
+        <div class="v-row"><span>Arranque y procesos</span><span class="v-tg off"></span></div>
+      </div>
+    </div>
+    <div class="v-card v-prev">
+      <p class="v-lbl">Vista previa</p>
+      <div class="v-prev-h"><b>Informe de seguridad · EQUIPO-WIN</b><small>Datos de ejemplo</small></div>
+      <div class="v-prev-score"><span>49</span><small>de 100</small></div>
+      <div class="v-li"><span>Microsoft Defender</span><i class="bd ok">Correcto</i></div>
+      <div class="v-li"><span>Firewall de Windows</span><i class="bd wa">Advertencia</i></div>
+      <div class="v-li"><span>Windows Update</span><i class="bd ko">Fallo</i></div>
+      <div class="v-li"><span>Cifrado BitLocker</span><i class="bd ko">Fallo</i></div>
+      <div class="v-li"><span>Control de cuentas (UAC)</span><i class="bd ok">Correcto</i></div>
+    </div>
+  </div>
+</section>
+<section class="axv" role="tabpanel" id="axp-ajustes" aria-labelledby="axt-ajustes" data-kind="html" hidden>
+  <div class="v-head"><div><p class="v-eye">Ajustes</p><h4>Preferencias</h4><p class="v-desc">Todo se guarda en este equipo. Vigía no tiene cuenta ni servidor.</p></div></div>
+  <div class="v-card v-set">
+    <div class="v-row"><span><b>Clave de VirusTotal</b><small>Opcional. Solo se usa para consultar hashes.</small></span><span class="v-input sm">Sin configurar</span></div>
+    <div class="v-row"><span><b>Refresco automático de Red</b><small>Actualiza las conexiones cada 5 s.</small></span><span class="v-tg off"></span></div>
+    <div class="v-row"><span><b>Confirmar antes de corregir</b><small>«Corregir» siempre muestra el cambio antes de aplicarlo.</small></span><span class="v-tg lock"></span></div>
+    <div class="v-row"><span><b>Telemetría</b><small>Vigía no envía datos de uso.</small></span><span class="bd ok">Sin telemetría</span></div>
+    <div class="v-row"><span><b>Idioma</b><small>Idioma de la interfaz.</small></span><span class="v-sel">Español ⌄</span></div>
+  </div>
+</section>
+
+            </div>
+          </div>
+        </div>
         <span class="g-wipe" aria-hidden="true"></span><span class="win-sheen" aria-hidden="true"></span>
       </figure>
-      <p class="cap mono">Capturas reales de la versión en desarrollo, en modo demostración.</p>
+      <p class="cap mono" id="ax-cap" aria-live="polite">Captura real de la versión en desarrollo, en modo demostración.</p>
     </div>
   </div>
 </section>
