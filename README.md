@@ -12,6 +12,6 @@ Publicada en GitHub Pages: https://rootesq-pixel.github.io/vigia-web/
 
 Edita `js/config.js`: revisa `url`, `file` y `size` de cada descarga y pon `available: true`.
 
-Las maquetas del panel son ilustrativas; no son capturas reales.
+Las capturas de img/app son reales (versión en desarrollo, modo demostración). La animación del índice y el mapa de conexiones son ilustrativos.
 
 © 2026 Vigía. Todos los derechos reservados.
