@@ -309,7 +309,7 @@
     const lists = $$('.ax-nav, .ax-tabs');
     const allTabs = $$('[role="tab"][data-v]', document).filter(t => t.closest('.ax-nav, .ax-tabs'));
     const views = $$('.axv', ax);
-    const CAP_REAL = 'Captura real de la versión en desarrollo, en modo demostración.';
+    const CAP_REAL = 'Captura real de la versión en desarrollo.';
     const CAP_HTML = 'Vista recreada en HTML con el estilo de la app y datos de ejemplo: todavía no hay captura real de este apartado.';
     let cur = 'panel';
     const fit = () => { const w = shell.offsetWidth; if (w) ax.style.setProperty('--k', ax.clientWidth / w); };
