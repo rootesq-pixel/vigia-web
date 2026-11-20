@@ -14,4 +14,4 @@ Edita `js/config.js`: revisa `url`, `file` y `size` de cada descarga y pon `avai
 
 Las maquetas del panel son ilustrativas; no son capturas reales.
 
-Licencia MIT.
+© 2026 Vigía. Todos los derechos reservados.

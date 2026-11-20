@@ -21,8 +21,9 @@ function heroVisible(cb) {
 
 function initGL() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
-  renderer.setClearColor(0x000000, 0);
+  const MOBILE = matchMedia('(max-width: 900px)').matches || matchMedia('(pointer: coarse)').matches;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.25 : 1.6));
+  renderer.setClearColor(0x0b0f17, 1);
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x0b0f17, 0.09);
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
@@ -140,10 +141,57 @@ function initGL() {
   const dust = new THREE.Points(dg, new THREE.PointsMaterial({ color: 0x22d3ee, size: 0.018, transparent: true, opacity: .45, depthWrite: false, blending: THREE.AdditiveBlending }));
   scene.add(dust);
 
+  /* ---------- postprocesado: bloom, aberración cromática, scanlines, glitch ---------- */
+  const rtBase = new THREE.WebGLRenderTarget(1, 1, { depthBuffer: true });
+  const rtA = new THREE.WebGLRenderTarget(1, 1, { depthBuffer: false }), rtB = new THREE.WebGLRenderTarget(1, 1, { depthBuffer: false });
+  const fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1), fsScene = new THREE.Scene();
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2)); fsScene.add(quad);
+  const VS = `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.,1.); }`;
+  const brightMat = new THREE.ShaderMaterial({ uniforms: { tIn: { value: null } }, vertexShader: VS,
+    fragmentShader: `uniform sampler2D tIn; varying vec2 vUv; void main(){ vec3 c=texture2D(tIn,vUv).rgb; float l=max(c.r,max(c.g,c.b)); gl_FragColor=vec4(c*smoothstep(.22,.75,l),1.); }` });
+  const blurMat = new THREE.ShaderMaterial({ uniforms: { tIn: { value: null }, uDir: { value: new THREE.Vector2() } }, vertexShader: VS,
+    fragmentShader: `uniform sampler2D tIn; uniform vec2 uDir; varying vec2 vUv;
+      void main(){ vec3 c=texture2D(tIn,vUv).rgb*.227;
+        c+=texture2D(tIn,vUv+uDir*1.38).rgb*.316; c+=texture2D(tIn,vUv-uDir*1.38).rgb*.316;
+        c+=texture2D(tIn,vUv+uDir*3.23).rgb*.07; c+=texture2D(tIn,vUv-uDir*3.23).rgb*.07;
+        gl_FragColor=vec4(c,1.); }` });
+  const post = { tBase: { value: rtBase.texture }, tBloom: { value: rtA.texture }, uRes: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 }, uBloom: { value: MOBILE ? 0 : 1.35 }, uGlitch: { value: 0 }, uCA: { value: .004 } };
+  const compMat = new THREE.ShaderMaterial({ uniforms: post, vertexShader: VS,
+    fragmentShader: `uniform sampler2D tBase,tBloom; uniform vec2 uRes; uniform float uTime,uBloom,uGlitch,uCA; varying vec2 vUv;
+      float h(float n){ return fract(sin(n)*43758.5453); }
+      void main(){
+        vec2 uv=vUv, d=uv-.5;
+        float row=floor(uv.y*48.), gt=floor(uTime*24.);
+        float g=uGlitch*step(.78,h(row*13.1+gt)); uv.x+=g*(h(row+gt)-.5)*.06;
+        float ca=uCA+uGlitch*.012;
+        vec2 o=d*ca*(1.+length(d)*2.);
+        vec3 c=vec3(texture2D(tBase,uv+o).r, texture2D(tBase,uv).g, texture2D(tBase,uv-o).b);
+        c+=texture2D(tBloom,uv).rgb*uBloom;
+        c*=.93+.07*sin(uv.y*uRes.y*1.5+uTime*6.);
+        c*=1.-dot(d,d)*.55;
+        c+=(h(dot(floor(uv*uRes),vec2(1.,113.))+uTime)-.5)*.03;
+        c=mix(vec3(.043,.059,.09),c,1.)+g*vec3(.0,.08,.1);
+        gl_FragColor=vec4(c,1.); }` });
+  let postOK = true;
+  function renderPost() {
+    renderer.setRenderTarget(rtBase); renderer.render(scene, camera);
+    if (post.uBloom.value > 0) {
+      quad.material = brightMat; brightMat.uniforms.tIn.value = rtBase.texture; renderer.setRenderTarget(rtA); renderer.render(fsScene, fsCam);
+      quad.material = blurMat; blurMat.uniforms.tIn.value = rtA.texture; blurMat.uniforms.uDir.value.set(1 / rtA.width, 0); renderer.setRenderTarget(rtB); renderer.render(fsScene, fsCam);
+      blurMat.uniforms.tIn.value = rtB.texture; blurMat.uniforms.uDir.value.set(0, 1 / rtA.height); renderer.setRenderTarget(rtA); renderer.render(fsScene, fsCam);
+    }
+    quad.material = compMat; renderer.setRenderTarget(null); renderer.render(fsScene, fsCam);
+  }
+  let glitchKick = 0;
+  addEventListener('vigia:booted', () => { glitchKick = 1; });
+
   let wide = true;
   function resize() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     renderer.setSize(w, h, false); camera.aspect = w / h;
+    const pr = renderer.getPixelRatio(), bw = Math.max(1, Math.floor(w * pr)), bh = Math.max(1, Math.floor(h * pr));
+    rtBase.setSize(bw, bh); rtA.setSize(Math.max(1, bw >> 2), Math.max(1, bh >> 2)); rtB.setSize(Math.max(1, bw >> 2), Math.max(1, bh >> 2));
+    post.uRes.value.set(bw, bh);
     wide = w / h > 1.05;
     camera.fov = wide ? 40 : 56;
     camera.updateProjectionMatrix();
@@ -176,7 +224,13 @@ function initGL() {
     dust.rotation.y = t * .01; dust.position.y = -prog * 1.5;
     canvas.style.opacity = String(1 - prog * .85);
     if (readout) readout.textContent = String(Math.round(((uni.uSweep.value * 180 / Math.PI) % 360))).padStart(3, '0') + '°';
-    renderer.render(scene, camera);
+    post.uTime.value = t;
+    glitchKick *= .93;
+    const rnd = Math.random() < .004 ? .5 : 0;
+    post.uGlitch.value = Math.min(1, glitchKick + prog * .6 + rnd);
+    post.uCA.value = .004 + prog * .02;
+    if (postOK) { try { renderPost(); } catch (e) { postOK = false; renderer.setRenderTarget(null); renderer.render(scene, camera); } }
+    else renderer.render(scene, camera);
   }
   function loop() {
     raf = 0;

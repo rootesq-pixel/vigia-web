@@ -5,7 +5,6 @@ window.VIGIA = {
   version: '1.0.0',
   tag: 'v1.0.0',
   available: false,            // false = botones «Próximamente» deshabilitados
-  repo: 'https://github.com/rootesq-pixel/vigia-security',
   downloads: {
     setup: {
       label: 'Instalador',

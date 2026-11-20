@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vigía · Centinela de seguridad para tu Windows</title>
-<meta name="description" content="Vigía audita, vigila y refuerza tu PC con Windows desde un único panel: puntuación de seguridad, auditoría con corrección guiada, monitor de red, arranque, procesos, hashes y contraseñas. Sin cuenta y 100 % local. Código abierto (MIT).">
+<meta name="description" content="Vigía audita, vigila y refuerza tu PC con Windows desde un único panel: puntuación de seguridad, auditoría con corrección guiada, monitor de red, arranque, procesos, hashes y contraseñas. Sin cuenta y 100 % local.">
 <meta name="theme-color" content="#0B0F17">
 <meta property="og:title" content="Vigía · Centinela de seguridad para tu Windows">
 <meta property="og:description" content="Audita, vigila y refuerza tu PC con Windows desde un único panel. Sin cuenta. Ningún dato sale de tu equipo.">
@@ -14,12 +14,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("vigia-boot"))document.documentElement.classList.add("booting")}catch(e){}</script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 </head>
 <body>
 <div class="progress" aria-hidden="true"><span></span></div>
 <div class="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
 <div class="grain" aria-hidden="true"></div>
+<div class="alarm" aria-hidden="true"></div>
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot-half top"></div><div class="boot-half bot"></div>
+  <div class="boot-in">
+    <div class="bio"><svg viewBox="0 0 120 120"><circle class="bio-r1" cx="60" cy="60" r="56"/><circle class="bio-r2" cx="60" cy="60" r="46"/></svg><span class="bio-ic"><i data-lucide="fingerprint"></i></span><span class="bio-scan"></span></div>
+    <pre class="boot-log mono" id="boot-log"></pre>
+    <div class="boot-bar"><span></span></div>
+  </div>
+  <button class="boot-skip mono" type="button">Saltar intro ›</button>
+</div>
 
 <header class="nav" id="top">
   <a class="brand" href="#inicio" aria-label="Vigía, inicio"><img src="img/logo.svg" alt="" width="30" height="30"><span>Vigía</span></a>
@@ -27,10 +38,12 @@
     <a href="#panel">Panel</a>
     <a href="#funciones">Funciones</a>
     <a href="#red">Red</a>
+    <a href="#contrasenas">Contraseñas</a>
     <a href="#privacidad">Privacidad</a>
     <a href="#como">Cómo funciona</a>
     <a href="#faq">FAQ</a>
   </nav>
+  <button class="snd" type="button" aria-pressed="false" aria-label="Activar sonido de interfaz" title="Sonido de interfaz (apagado)"><span class="s-off"><i data-lucide="volume-x"></i></span><span class="s-on"><i data-lucide="volume-2"></i></span></button>
   <a class="btn btn-sm btn-ghost nav-cta" href="#descargas"><i data-lucide="download"></i>Descargar</a>
   <button class="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><i data-lucide="menu"></i></button>
 </header>
@@ -41,7 +54,7 @@
   <canvas id="radar" aria-hidden="true"></canvas>
   <div class="hero-vignette" aria-hidden="true"></div>
   <div class="hero-inner">
-    <p class="kicker mono"><span class="dot"></span>App de ciberseguridad para Windows · Código abierto</p>
+    <p class="kicker mono"><span class="dot"></span>App de ciberseguridad para Windows · 100 % defensiva</p>
     <h1 class="hero-title"><span class="split">Vigía</span></h1>
     <p class="hero-lema">Centinela de seguridad para tu Windows.</p>
     <p class="hero-sub">Audita, vigila y refuerza tu propio PC desde un único panel. <strong>Sin cuenta</strong> y <strong>sin que ningún dato salga del equipo</strong>.</p>
@@ -53,7 +66,7 @@
       <li><span>100 %</span> local</li>
       <li><span>0</span> cuentas</li>
       <li><span>8</span> módulos</li>
-      <li><span>MIT</span> licencia</li>
+      <li><span>x64</span> Windows</li>
     </ul>
   </div>
   <div class="hero-readout mono" aria-hidden="true">
@@ -71,23 +84,43 @@
   </div>
 </div>
 
+<!-- CAPTURA REAL: PANEL -->
+<section class="sec show-sec" id="app">
+  <div class="wrap show-head">
+    <p class="eyebrow mono">Así es Vigía</p>
+    <h2 data-scan>Un centro de mando para tu PC.</h2>
+    <p class="lead narrow">El panel resume tus defensas en un índice de 0 a 100: un control correcto suma todo su peso, una advertencia la mitad y un fallo cero. Debajo, lo que requiere atención y lo que ya está en orden.</p>
+  </div>
+  <div class="show-stage">
+    <div class="show-glow" aria-hidden="true"></div>
+    <figure class="win win-xl" data-tilt>
+      <img src="img/app/01-dashboard-1423.webp" srcset="img/app/01-dashboard-760.webp 760w, img/app/01-dashboard-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Captura de Vigía: panel con el índice de seguridad, controles correctos, advertencias y fallos, y la lista de lo que requiere atención" fetchpriority="high" decoding="async">
+      <span class="win-sheen" aria-hidden="true"></span>
+    </figure>
+    <span class="callout c1 mono" aria-hidden="true"><b></b>Índice 0-100 ponderado</span>
+    <span class="callout c2 mono" aria-hidden="true"><b></b>Sin telemetría</span>
+    <span class="callout c3 mono" aria-hidden="true"><b></b>Lo que ya está en orden</span>
+  </div>
+  <p class="cap mono">Captura real de la versión en desarrollo, en modo demostración.</p>
+</section>
+
 <!-- PANEL / PUNTUACIÓN -->
 <section class="sec panel-sec" id="panel">
   <div class="panel-stage">
     <div class="panel-copy">
       <p class="eyebrow mono">01 · Puntuación de seguridad</p>
       <h2 data-scan>Tu PC, de <span class="c-crit">rojo</span> a <span class="c-ok">verde</span>.</h2>
-      <p class="lead">Vigía revisa la configuración de Windows y la resume en una puntuación de 0 a 100 con semáforos. Cada punto débil viene explicado en lenguaje claro y con un botón <strong>Corregir</strong> que siempre pide confirmación antes de tocar nada.</p>
+      <p class="lead">Vigía revisa diez defensas de Windows y las resume en un índice de 0 a 100 con semáforos. Cada punto débil viene explicado en lenguaje claro, con su evidencia y un botón <strong>Corregir</strong> que no hace nada hasta que confirmas el cambio.</p>
       <ol class="phase mono">
         <li data-phase="0">Auditando el sistema…</li>
         <li data-phase="1">Aplicando correcciones confirmadas…</li>
         <li data-phase="2">Equipo reforzado</li>
       </ol>
-      <p class="note mono">Maqueta ilustrativa: no es una captura real ni una puntuación de un equipo concreto.</p>
+      <p class="note mono">Animación ilustrativa del cálculo del índice, no es la puntuación de un equipo concreto.</p>
     </div>
 
     <div class="app-window" aria-label="Maqueta del panel de Vigía">
-      <div class="aw-bar"><span class="aw-dots"><i></i><i></i><i></i></span><span class="mono">Vigía — Panel</span><span class="aw-tag mono">MAQUETA</span></div>
+      <div class="aw-bar"><span class="aw-dots"><i></i><i></i><i></i></span><span class="mono">Vigía — Panel</span><span class="aw-tag mono">DEMO ANIMADA</span></div>
       <div class="aw-body">
         <aside class="aw-side">
           <span class="on" title="Panel"><i data-lucide="gauge"></i></span>
@@ -124,11 +157,11 @@
     <div>
       <p class="eyebrow mono">02 · Auditoría explicada</p>
       <h2 data-scan>Diez comprobaciones clave. Ninguna caja negra.</h2>
-      <p class="lead">Defender, firewall, Windows Update, BitLocker, UAC, SMBv1, RDP, Secure Boot y TPM, cuentas de administrador y política de contraseñas. Vigía lee el estado real con PowerShell y CIM, te dice qué significa cada resultado y por qué importa.</p>
+      <p class="lead">Defender, firewall, Windows Update, BitLocker, UAC, SMBv1, RDP, Secure Boot y TPM, cuentas de administrador y política de contraseñas. Vigía lee el estado real con PowerShell y CIM, te dice qué significa cada resultado, te enseña la evidencia y cuánto pesa en tu índice.</p>
       <ul class="legend mono">
-        <li><b class="ok"></b>OK · Correcto</li>
-        <li><b class="warn"></b>AVISO · Mejorable</li>
-        <li><b class="crit"></b>CRÍTICO · Corregir</li>
+        <li><b class="ok"></b>Correcto</li>
+        <li><b class="warn"></b>Advertencia</li>
+        <li><b class="crit"></b>Fallo</li>
       </ul>
     </div>
     <div class="terminal" aria-label="Ejemplo ilustrativo de registro de auditoría">
@@ -146,13 +179,30 @@
     <p class="lead narrow">Herramientas que normalmente tendrías que buscar por separado, reunidas en un panel pensado para entender lo que pasa en tu equipo.</p>
     <div class="grid-feat">
       <article class="card" data-up><span class="ic"><i data-lucide="gauge"></i></span><span class="num mono">01</span><h3>Puntuación 0-100</h3><p>Un número y semáforos verde, ámbar y rojo para saber de un vistazo cómo de protegido está tu PC.</p></article>
-      <article class="card" data-up><span class="ic"><i data-lucide="list-checks"></i></span><span class="num mono">02</span><h3>Auditoría con «Corregir»</h3><p>Cada hallazgo explicado y con corrección en un clic. Siempre pide confirmación antes de cambiar nada.</p></article>
-      <article class="card" data-up><span class="ic"><i data-lucide="network"></i></span><span class="num mono">03</span><h3>Monitor de red en vivo</h3><p>Conexiones por proceso y puertos a la escucha en tiempo real, al estilo TCPView.</p></article>
+      <article class="card" data-up><span class="ic"><i data-lucide="list-checks"></i></span><span class="num mono">02</span><h3>Auditoría con «Corregir»</h3><p>Cada control con su peso, su evidencia y «Corregir», que no hace nada hasta que confirmas el cambio.</p></article>
+      <article class="card" data-up><span class="ic"><i data-lucide="network"></i></span><span class="num mono">03</span><h3>Monitor de red en vivo</h3><p>Conexiones TCP con proceso, PID, estado y puertos a la escucha, al estilo TCPView.</p></article>
       <article class="card" data-up><span class="ic"><i data-lucide="power"></i></span><span class="num mono">04</span><h3>Arranque y persistencia</h3><p>Claves Run, tareas programadas y servicios, con verificación de firma digital, al estilo Autoruns.</p></article>
       <article class="card" data-up><span class="ic"><i data-lucide="cpu"></i></span><span class="num mono">05</span><h3>Procesos al detalle</h3><p>Cada proceso con su firma, su ruta en disco y su hash SHA-256.</p></article>
       <article class="card" data-up><span class="ic"><i data-lucide="file-search"></i></span><span class="num mono">06</span><h3>Análisis por hash</h3><p>Reglas tipo YARA en local y consulta opcional a VirusTotal con tu propia clave: solo se envía el hash.</p></article>
-      <article class="card" data-up><span class="ic"><i data-lucide="key-round"></i></span><span class="num mono">07</span><h3>Contraseñas seguras</h3><p>Generador y comprobación de filtraciones con Have I Been Pwned de forma anónima (k-anonymity).</p></article>
+      <article class="card" data-up><span class="ic"><i data-lucide="key-round"></i></span><span class="num mono">07</span><h3>Contraseñas seguras</h3><p>Generador con entropía estimada y comprobación de filtraciones en Have I Been Pwned con k-anonimato.</p></article>
       <article class="card" data-up><span class="ic"><i data-lucide="file-text"></i></span><span class="num mono">08</span><h3>Informes HTML y PDF</h3><p>Exporta el estado de tu equipo para guardarlo, compararlo o enseñárselo a quien te ayude.</p></article>
+    </div>
+    <div class="gallery" data-up>
+      <div class="g-tabs mono" role="tablist" aria-label="Capturas de Vigía">
+        <button role="tab" aria-selected="true" data-i="0"><i data-lucide="gauge"></i>Panel</button>
+        <button role="tab" aria-selected="false" data-i="1"><i data-lucide="list-checks"></i>Auditoría</button>
+        <button role="tab" aria-selected="false" data-i="2"><i data-lucide="network"></i>Red</button>
+        <button role="tab" aria-selected="false" data-i="3"><i data-lucide="key-round"></i>Contraseñas</button>
+        <span class="g-ind" aria-hidden="true"></span>
+      </div>
+      <figure class="win win-lg g-stage" data-tilt>
+        <img class="on" src="img/app/01-dashboard-1423.webp" srcset="img/app/01-dashboard-760.webp 760w, img/app/01-dashboard-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Panel de Vigía con el índice de seguridad" loading="lazy" decoding="async">
+        <img src="img/app/02-auditoria-1423.webp" srcset="img/app/02-auditoria-760.webp 760w, img/app/02-auditoria-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Auditoría de Vigía: diez controles del puesto con estado, peso, evidencia y botón Corregir" loading="lazy" decoding="async">
+        <img src="img/app/03-red-1423.webp" srcset="img/app/03-red-760.webp 760w, img/app/03-red-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Vista de red de Vigía: conexiones TCP con proceso, PID, dirección local, remota y estado" loading="lazy" decoding="async">
+        <img src="img/app/04-contrasenas-1423.webp" srcset="img/app/04-contrasenas-760.webp 760w, img/app/04-contrasenas-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Generador de contraseñas de Vigía y comprobación de filtraciones con k-anonimato" loading="lazy" decoding="async">
+        <span class="g-wipe" aria-hidden="true"></span><span class="win-sheen" aria-hidden="true"></span>
+      </figure>
+      <p class="cap mono">Capturas reales de la versión en desarrollo, en modo demostración.</p>
     </div>
   </div>
 </section>
@@ -160,32 +210,55 @@
 <!-- RED -->
 <section class="sec net-sec" id="red">
   <div class="wrap two rev">
-    <div class="net-panel" aria-label="Maqueta ilustrativa del monitor de red">
-      <div class="aw-bar"><span class="aw-dots"><i></i><i></i><i></i></span><span class="mono">Vigía — Red</span><span class="aw-tag mono">MAQUETA</span></div>
-      <canvas id="net" aria-hidden="true"></canvas>
-      <table class="conn mono">
-        <thead><tr><th>Proceso</th><th>Remoto</th><th>Estado</th></tr></thead>
-        <tbody id="conn"></tbody>
-      </table>
+    <div class="net-combo">
+      <figure class="win win-md" data-tilt>
+        <img src="img/app/03-red-1423.webp" srcset="img/app/03-red-760.webp 760w, img/app/03-red-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Captura de la vista Red de Vigía: conexiones TCP con proceso, PID, dirección local, remota y estado" loading="lazy" decoding="async">
+        <span class="win-sheen" aria-hidden="true"></span>
+      </figure>
+      <div class="net-panel net-float" aria-label="Animación ilustrativa del mapa de conexiones">
+        <div class="aw-bar"><span class="aw-dots"><i></i><i></i><i></i></span><span class="mono">Mapa de conexiones</span><span class="aw-tag mono">ANIMACIÓN</span></div>
+        <div class="net-stage"><canvas id="net" aria-hidden="true"></canvas><div class="net-alert mono" role="status" aria-live="polite"></div></div>
+      </div>
     </div>
     <div>
       <p class="eyebrow mono">04 · Monitor de red</p>
       <h2 data-scan>Mira quién habla con quién.</h2>
-      <p class="lead">Vigía enlaza cada conexión con el proceso que la abrió y te enseña los puertos que tu equipo deja a la escucha. Si algo se conecta sin que lo esperes, lo verás.</p>
+      <p class="lead">Un monitor de sockets local: cada conexión TCP con su proceso y PID, dirección local y remota y estado. Si algo se conecta sin que lo esperes, lo verás. No escanea ningún equipo remoto.</p>
       <ul class="ticks">
-        <li><i data-lucide="activity"></i>Conexiones TCP y UDP por proceso, en vivo</li>
-        <li><i data-lucide="server"></i>Puertos a la escucha y quién los abre</li>
-        <li><i data-lucide="fingerprint"></i>Firma digital y ruta del ejecutable</li>
+        <li><i data-lucide="activity"></i>Conexiones TCP con proceso y PID</li>
+        <li><i data-lucide="server"></i>Puertos a la escucha (LISTEN) y quién los abre</li>
+        <li><i data-lucide="scan-line"></i>Filtro por proceso, IP o PID y refresco cada 5 s</li>
       </ul>
-      <p class="note mono">Direcciones de ejemplo de rangos de documentación (RFC 5737).</p>
+      <p class="note mono">Captura real tomada fuera de Windows, en modo demostración. En Windows los datos salen de Get-NetTCPConnection. El mapa animado usa direcciones de ejemplo (RFC 5737).</p>
     </div>
+  </div>
+</section>
+
+<!-- CONTRASEÑAS -->
+<section class="sec pw-sec" id="contrasenas">
+  <div class="wrap two">
+    <div>
+      <p class="eyebrow mono">05 · Contraseñas</p>
+      <h2 data-scan>Contraseñas fuertes. Filtraciones, sin delatarte.</h2>
+      <p class="lead">El generador usa aleatoriedad criptográfica local y te enseña la entropía estimada. Para saber si una contraseña ha aparecido en filtraciones, Vigía calcula su SHA-1 en tu equipo, pide a Have I Been Pwned solo el rango de los 5 primeros caracteres y compara el resto en memoria.</p>
+      <ul class="ticks">
+        <li><i data-lucide="key-round"></i>Longitud, mayúsculas, dígitos, símbolos y evitar ambiguos</li>
+        <li><i data-lucide="gauge"></i>Entropía estimada en tiempo real</li>
+        <li><i data-lucide="eye-off"></i>La contraseña completa nunca viaja</li>
+      </ul>
+    </div>
+    <figure class="win win-md" data-tilt>
+      <img src="img/app/04-contrasenas-1423.webp" srcset="img/app/04-contrasenas-760.webp 760w, img/app/04-contrasenas-1423.webp 1423w" sizes="(max-width: 900px) 92vw, 1100px" width="1423" height="892" alt="Captura de Vigía: generador de contraseñas con opciones y entropía, y comprobación de filtraciones con k-anonimato" loading="lazy" decoding="async">
+      <span class="win-sheen" aria-hidden="true"></span>
+      <figcaption class="cap mono">Captura real de la versión en desarrollo.</figcaption>
+    </figure>
   </div>
 </section>
 
 <!-- PRIVACIDAD -->
 <section class="sec priv-sec" id="privacidad">
   <div class="wrap">
-    <p class="eyebrow mono">05 · Privacidad</p>
+    <p class="eyebrow mono">06 · Privacidad</p>
     <h2 data-scan>Lo que pasa en tu PC, se queda en tu PC.</h2>
     <p class="lead narrow">Sin cuenta, sin telemetría y sin nube. Las dos únicas consultas externas son opcionales y nunca envían tus archivos ni tus contraseñas.</p>
     <div class="priv">
@@ -199,7 +272,7 @@
         <div class="pl" data-up><i data-lucide="cloud-off"></i><div><h3>100 % local</h3><p>Auditoría, monitor, análisis e informes se ejecutan en tu equipo. Nada se sube a ningún servidor de Vigía, porque no hay.</p></div></div>
         <div class="pl" data-up><i data-lucide="user-round-check"></i><div><h3>Sin cuenta</h3><p>Abres la app y funciona. Sin registros, sin correos y sin inicios de sesión.</p></div></div>
         <div class="pl" data-up><i data-lucide="fingerprint"></i><div><h3>VirusTotal, opcional</h3><p>Si lo activas con tu propia clave, solo se envía el hash SHA-256 del archivo, nunca el archivo.</p></div></div>
-        <div class="pl" data-up><i data-lucide="eye-off"></i><div><h3>Filtraciones con k-anonymity</h3><p>Para comprobar una contraseña solo salen los 5 primeros caracteres de su hash SHA-1. La comparación final se hace en tu PC.</p></div></div>
+        <div class="pl" data-up><i data-lucide="eye-off"></i><div><h3>Filtraciones con k-anonimato</h3><p>Para comprobar una contraseña solo salen los 5 primeros caracteres de su hash SHA-1. La comparación final se hace en tu PC.</p></div></div>
       </div>
     </div>
   </div>
@@ -209,7 +282,7 @@
 <section class="sec steps-sec" id="como">
   <div class="steps-pin">
     <div class="wrap steps-head">
-      <p class="eyebrow mono">06 · Cómo funciona</p>
+      <p class="eyebrow mono">07 · Cómo funciona</p>
       <h2 data-scan>Cuatro pasos. Cero sustos.</h2>
     </div>
     <div class="steps-track">
@@ -219,7 +292,7 @@
       <article class="step"><span class="sn mono">04</span><i data-lucide="radar"></i><h3>Vigila</h3><p>Red, arranque y procesos a la vista para detectar lo que no debería estar ahí.</p></article>
       <article class="step stack">
         <span class="sn mono">STACK</span><i data-lucide="box"></i><h3>Tecnología</h3>
-        <ul class="chips mono"><li>Electron</li><li>TypeScript</li><li>React</li><li>PowerShell</li><li>CIM / WMI</li><li>NSIS</li><li>MIT</li></ul>
+        <ul class="chips mono"><li>Electron</li><li>TypeScript</li><li>React</li><li>PowerShell</li><li>CIM / WMI</li><li>NSIS</li></ul>
       </article>
     </div>
   </div>
@@ -228,7 +301,7 @@
 <!-- PÚBLICO -->
 <section class="sec aud-sec">
   <div class="wrap">
-    <p class="eyebrow mono">07 · Para quién</p>
+    <p class="eyebrow mono">08 · Para quién</p>
     <h2 data-scan>Para quien quiere saber, no adivinar.</h2>
     <div class="aud">
       <span data-up>Usuarios avanzados</span><span data-up>Gamers</span><span data-up>Freelancers</span><span data-up>Pymes</span><span data-up>Estudiantes de ciberseguridad</span>
@@ -236,10 +309,23 @@
   </div>
 </section>
 
+<!-- ESCUDO DE PARTÍCULAS -->
+<section class="forge-sec" id="escudo">
+  <div class="forge-pin">
+    <canvas id="forge" aria-hidden="true"></canvas>
+    <div class="forge-copy">
+      <p class="eyebrow mono">Pieza a pieza</p>
+      <h2 data-scan>Cada ajuste suma al escudo.</h2>
+      <p class="lead">Un firewall activo, un protocolo antiguo desactivado, una contraseña más larga. Vigía convierte decenas de detalles dispersos en una defensa coherente.</p>
+      <p class="forge-meter mono"><span>INTEGRIDAD</span><b id="forge-val">0 %</b><em>(animación ilustrativa)</em></p>
+    </div>
+  </div>
+</section>
+
 <!-- DESCARGAS -->
 <section class="sec dl-sec" id="descargas">
   <div class="wrap">
-    <p class="eyebrow mono">08 · Descargas</p>
+    <p class="eyebrow mono">09 · Descargas</p>
     <h2 data-scan>Vigía <span class="ver mono" data-version>v1.0.0</span> para Windows</h2>
     <p class="lead narrow" id="dl-status">Estamos terminando y probando la primera versión. Los botones se activarán aquí mismo en cuanto esté publicada.</p>
     <div class="dl-grid">
@@ -258,21 +344,21 @@
         <a class="btn btn-ghost is-disabled" aria-disabled="true" tabindex="-1"><i data-lucide="download"></i><span>Próximamente</span></a>
       </div>
     </div>
-    <p class="note mono center">Código abierto bajo licencia MIT · El código fuente se publicará junto con la primera versión.</p>
+    <p class="note mono center">Los enlaces de descarga se activarán en esta página cuando se publique la versión 1.0.0.</p>
   </div>
 </section>
 
 <!-- FAQ -->
 <section class="sec faq-sec" id="faq">
   <div class="wrap narrow-wrap">
-    <p class="eyebrow mono">09 · Preguntas frecuentes</p>
+    <p class="eyebrow mono">10 · Preguntas frecuentes</p>
     <h2 data-scan>Preguntas frecuentes</h2>
     <div class="faq">
       <details><summary>¿Vigía sustituye a mi antivirus?<i data-lucide="chevron-down"></i></summary><p>No. Vigía no es un antivirus: comprueba que las protecciones de Windows (como Microsoft Defender y el firewall) estén activas y bien configuradas, y te da herramientas para vigilar tu equipo. Funciona junto a ellas.</p></details>
       <details><summary>¿Envía algún dato fuera de mi PC?<i data-lucide="chevron-down"></i></summary><p>No por defecto. Todo se analiza en local. Solo si tú activas VirusTotal (con tu propia clave) se envía el hash SHA-256 de un archivo, y al comprobar una contraseña en Have I Been Pwned solo salen los 5 primeros caracteres de su hash SHA-1.</p></details>
       <details><summary>¿Puede cambiar mi configuración sin avisar?<i data-lucide="chevron-down"></i></summary><p>No. El botón «Corregir» explica qué va a cambiar y pide confirmación antes de aplicar nada. Algunos ajustes de Windows requieren permisos de administrador.</p></details>
       <details><summary>¿Sirve para escanear o atacar otros equipos?<i data-lucide="chevron-down"></i></summary><p>No. Vigía es 100 % defensiva y está pensada solo para tu propio equipo. No incluye escáneres de redes ajenas ni herramientas ofensivas.</p></details>
-      <details><summary>¿Es gratis? ¿Puedo ver el código?<i data-lucide="chevron-down"></i></summary><p>Sí. Es de código abierto con licencia MIT. El repositorio se publicará junto con la primera versión.</p></details>
+      <details><summary>¿Necesito saber de ciberseguridad?<i data-lucide="chevron-down"></i></summary><p>No. Cada comprobación se explica en lenguaje claro: qué significa, por qué importa y qué hace el botón «Corregir». Si sabes más, tienes el detalle técnico (firmas, rutas, hashes y puertos) a la vista.</p></details>
       <details><summary>¿Qué versiones de Windows admite?<i data-lucide="chevron-down"></i></summary><p>Está pensada para Windows de 64 bits (x64). Habrá instalador y versión portable; los requisitos exactos se indicarán con la primera versión.</p></details>
       <details><summary>¿Cuándo sale?<i data-lucide="chevron-down"></i></summary><p>La versión 1.0.0 está en desarrollo y pruebas. Cuando esté lista, los botones de descarga de esta página se activarán.</p></details>
     </div>
@@ -284,7 +370,7 @@
   <div class="wrap foot-in">
     <div class="foot-brand"><img src="img/logo.svg" alt="" width="34" height="34"><div><strong>Vigía</strong><span>Centinela de seguridad para tu Windows</span></div></div>
     <p class="defensive"><i data-lucide="shield-alert"></i><span><strong>Uso defensivo.</strong> Vigía está diseñada para auditar y proteger únicamente equipos propios o sobre los que tienes autorización. No la uses para acceder, escanear ni modificar sistemas de terceros.</span></p>
-    <div class="foot-bot mono"><span>© <span id="year">2026</span> Vigía · Licencia MIT</span><span>Windows es una marca de Microsoft Corporation. Vigía no está afiliada a Microsoft.</span><a href="#inicio">Volver arriba ↑</a></div>
+    <div class="foot-bot mono"><span>© 2026 Vigía. Todos los derechos reservados.</span><span>Windows es una marca de Microsoft Corporation. Vigía no está afiliada a Microsoft.</span><a href="#inicio">Volver arriba ↑</a></div>
   </div>
 </footer>
 
@@ -295,6 +381,7 @@
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js" defer></script>
 <script src="js/app.js" defer></script>
+<script src="js/fx.js" defer></script>
 <script type="module" src="js/radar.js"></script>
 </body>
 </html>
