@@ -49,8 +49,14 @@
     const a = $('.btn', box);
     if (cfg.available && d.url) {
       a.href = d.url; a.classList.remove('is-disabled'); a.removeAttribute('aria-disabled'); a.removeAttribute('tabindex');
-      a.setAttribute('download', d.file);
+      a.target = '_blank'; a.rel = 'noopener';
+      a.removeAttribute('download');
       $('span', a).textContent = 'Descargar ' + d.label.toLowerCase() + (d.size ? ' · ' + d.size : '');
+      if (d.md5) {
+        let m = $('.hash', box);
+        if (!m) { m = document.createElement('p'); m.className = 'mono hash'; a.before(m); }
+        m.textContent = 'MD5 ' + d.md5;
+      }
     }
   });
   if (cfg.available) {
